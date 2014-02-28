@@ -33,3 +33,8 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
    Generates custom metrics for sending to cloudwatch.  In this example, the metric is a count of the number of processes running matching a particular pattern but it could be anything.  We tag them against the instance ID so we can see the metrics next to the standard instance metrics like disk space and CPU.
    
    
+02_elasticip_assigner.config
+
+   Auto-assigns an elastic IP to "this" instance.  Complicated quite a bit by the fact that in EC2 classic, an instance can "steal" an EIP from another and there is a massive race condition.  This all works pretty well with one small exception.  Messages in an SQS queue (used as a lock mechanism here) are auto-removed after a max of 14 days.  This extension relies on there always being 1 (and only 1) message in the queue.  So we use a cron job to remove the message and re-post it once a day (the keepalive).  The hole is if something happens (crash, etc.) between the delete and tha add, it will lock out all other instances from being able to obtain the lock from the queue.  It's a small possibility but still there.  This is the most complex extension I've had to create!
+   
+   
