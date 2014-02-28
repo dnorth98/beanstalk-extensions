@@ -9,4 +9,5 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
 01_install_s3get.config
    This extension installs a handy python script I found which allows GET of content from a private S3 bucket.  The nice thing is that using instance roles, it requires no access keys and the role can be used to lock down access to only the bucket you need.  It does nothing more than add the script/tool to an instance.
    
-   
+01_install_updateroute53.config
+   Installs a small utility that allows updating of 'this' instance's IP address into Route53.  Takes a domain suffix as an argument (which in our case, we pass as a beanstalk paramter and then pass into the script later).  Uses instance roles for access control.
