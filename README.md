@@ -14,3 +14,7 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
 01_install_updateroute53.config
 
    Installs a small utility that allows updating of 'this' instance's IP address into Route53.  Takes a domain suffix as an argument (which in our case, we pass as a beanstalk paramter and then pass into the script later).  Uses instance roles for access control.
+
+01_papertrail.config
+
+   Extension to configure the instance to send logs to papertrail (http://papertrailapp.com).  I based this on the article in the papertrail knowledgebase BUT I modified it to use a 'hostname' of the beanstalk environment name concatenated with the instance ID.  Makes finding and searching the logs very easy.
