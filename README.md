@@ -18,3 +18,7 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
 01_papertrail.config
 
    Extension to configure the instance to send logs to papertrail (http://papertrailapp.com).  I based this on the article in the papertrail knowledgebase BUT I modified it to use a 'hostname' of the beanstalk environment name concatenated with the instance ID.  Makes finding and searching the logs very easy.
+
+01_tag_resources.config
+
+   Small extension which shows how to tag instances with custom tags.
