@@ -1,0 +1,36 @@
+Resources:
+  EIPQueue:
+    Type: AWS::SQS::Queue
+    Properties: 
+      VisibilityTimeout: 30
+      
+  AWSEBSecurityGroup:
+    Type: "AWS::EC2::SecurityGroup"
+    Properties:
+      GroupDescription: "Security group to allow PRODUCT traffic, ELB healthcheck"
+      SecurityGroupIngress:
+        - {SourceSecurityGroupName: "amazon-elb-sg", SourceSecurityGroupOwnerId: "amazon-elb", IpProtocol: "tcp", FromPort: "80", ToPort: "80"}
+        - {CidrIp: "0.0.0.0/0", IpProtocol: "tcp", FromPort: "49221", ToPort: "49421"}
+        - {CidrIp: "0.0.0.0/0", IpProtocol: "udp", FromPort: "49221", ToPort: "49421"}
+        - {CidrIp: "0.0.0.0/0", IpProtocol: "tcp", FromPort: { "Fn::GetOptionSetting": {"OptionName": "HTTP_SERVER_PORT", "Namespace":"aws:elasticbeanstalk:application:environment"}}, ToPort: { "Fn::GetOptionSetting": {"OptionName": "HTTP_SERVER_PORT", "Namespace":"aws:elasticbeanstalk:application:environment"}}}
+  AWSEBLoadBalancer:
+    Type: "AWS::ElasticLoadBalancing::LoadBalancer"
+    Properties:
+      Listeners:
+        - {LoadBalancerPort: 80, InstancePort: 80, Protocol: "HTTP"}
+        - {LoadBalancerPort: 49221, InstancePort: 49221, Protocol: "TCP"}
+        - {LoadBalancerPort: { "Fn::GetOptionSetting": {"OptionName": "HTTP_SERVER_PORT", "Namespace":"aws:elasticbeanstalk:application:environment"}}, InstancePort: { "Fn::GetOptionSetting": {"OptionName": "HTTP_SERVER_PORT", "Namespace":"aws:elasticbeanstalk:application:environment"}}, Protocol: "HTTP"}
+  AWSEBAutoScalingGroup:
+    Type: "AWS::AutoScaling::AutoScalingGroup"
+    Properties:
+      HealthCheckType: "ELB"
+      HealthCheckGracePeriod: 420          
+
+files:
+  "/usr/local/PRODUCT-tools/EIPQUEUENAME":
+    mode: "00555"
+    owner: root
+    group: root
+    encoding: plain
+    content: |  
+      `{ "Fn::GetAtt" : [ "EIPQueue", "QueueName"]}`
