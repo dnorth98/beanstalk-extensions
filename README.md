@@ -22,3 +22,10 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
 01_tag_resources.config
 
    Small extension which shows how to tag instances with custom tags.
+
+05_set_hostname.config
+
+   We had a requirement to have a hostname that we control registered in DNS.  This extension sets the hostname to <beanstalk env name>-<instanceID>.  It then adds on the domain suffix passed as beanstalk parameter called DOMAIN_SUFFIX.  Finally, it calls the updateroute53 script installed by the 01_install_updateroute53 extension to update DNS.
+   
+   
+   
