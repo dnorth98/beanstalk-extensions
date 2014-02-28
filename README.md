@@ -28,4 +28,8 @@ I've written quite a few extensions for AWS Elastic Beanstalk.  They are SUPER e
    We had a requirement to have a hostname that we control registered in DNS.  This extension sets the hostname to <beanstalk env name>-<instanceID>.  It then adds on the domain suffix passed as beanstalk parameter called DOMAIN_SUFFIX.  Finally, it calls the updateroute53 script installed by the 01_install_updateroute53 extension to update DNS.
    
    
+10_cloudwatch.config
+
+   Generates custom metrics for sending to cloudwatch.  In this example, the metric is a count of the number of processes running matching a particular pattern but it could be anything.  We tag them against the instance ID so we can see the metrics next to the standard instance metrics like disk space and CPU.
+   
    
